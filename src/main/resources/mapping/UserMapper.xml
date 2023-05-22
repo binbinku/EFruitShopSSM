@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bk.efruitshopssm.mapper.UserMapper">
+    <!--获取所有-->
+    <select id="GetAllUser" resultType="com.bk.efruitshopssm.entity.User">
+        select *
+        from user
+    </select>
+
+    <select id="FindUserByAccout" parameterType="String" resultType="int">
+        select count(*)
+        from user where account=#{account}
+    </select>
+
+    <select id="UserLoginCheck" parameterType="com.bk.efruitshopssm.entity.User" resultType="int">
+        select count(*)
+        from user
+        where account = #{account} and password = #{password}
+    </select>
+
+    <select id="AddUser" parameterType="com.bk.efruitshopssm.entity.User">
+        insert into user(account,password)
+        values (#{account}, #{password})
+    </select>
+
+
+</mapper>

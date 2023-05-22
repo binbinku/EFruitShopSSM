@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ebookshop
+    username: root
+    password: bai123456
+
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
