@@ -1,5 +1,6 @@
-package com.bk.efruitshopssm.controller;
+package com.bk.efruitshopssm.controller.main;
 
+import com.bk.efruitshopssm.entity.Unit.LoginBackUnit;
 import com.bk.efruitshopssm.entity.Unit.LoginUnit;
 import com.bk.efruitshopssm.entity.User;
 import com.bk.efruitshopssm.mapper.UserMapper;
@@ -34,10 +35,5 @@ public class LoginController
 }
 
 
-@Data
-class LoginBackUnit
-{
-    private boolean loginSucceeded;
-    private String redirectUrl;
-}
+
 

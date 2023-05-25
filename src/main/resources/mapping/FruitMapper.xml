@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.bk.efruitshopssm.mapper.UserMapper">
+<mapper namespace="com.bk.efruitshopssm.mapper.FruitMapper">
     <!--获取所有-->
     <select id="GetAllFruit" resultType="com.bk.efruitshopssm.entity.Fruit">
         select * from fruits
@@ -9,4 +9,15 @@
     <select id="GetFruitsByCategory" parameterType="int" resultType="com.bk.efruitshopssm.entity.Fruit">
         select * from fruits where fcategory=#{fcategory}
     </select>
+
+    <insert id="AddFruit" parameterType="com.bk.efruitshopssm.entity.Fruit">
+        insert into fruits (fname,fprice,fcategory,furl,finfo,fpubdate)
+        values (#{fname},#{fprice},#{fcategory},#{furl},#{finfo},#{fpubdate});
+    </insert>
+    <delete id="DelFruit" parameterType="int">
+        delete from fruits where fno = #{fno}
+    </delete>
+    <update id="ModFruit" parameterType="com.bk.efruitshopssm.entity.Fruit">
+        update fruits set fname=#{fname},fprice=#{fprice},fcategory=#{fcategory},furl=#{furl},finfo=#{finfo},fpubdate=#{fpubdate} where fno =#{fno}
+    </update>
 </mapper>

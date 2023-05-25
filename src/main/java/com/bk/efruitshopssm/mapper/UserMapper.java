@@ -12,4 +12,7 @@ public interface UserMapper
     int UserLoginCheck(User user);
     int FindUserByAccout(User user);
     void AddUser(User user);
+    List<User> UserFuzzyQuery(String account);
+    int UpdateUser(User user);
+    int DeleteUserByUid(int uid);
 }

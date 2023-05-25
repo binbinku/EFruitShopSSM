@@ -18,17 +18,14 @@
             <div class="left-panel-block" @click="ChangePanel(0,RefreshPanel)">
                 用户管理
             </div>
-            <div class="left-panel-block" @click="ChangePanel(1,RefreshPanel,QueryAllBookCategory)">
-                书籍类别管理
+            <div class="left-panel-block" @click="ChangePanel(1,RefreshPanel,QueryAllFruitCategory)">
+                水果类别管理
             </div>
-            <div class="left-panel-block" @click="ChangePanel(2,RefreshPanel,QueryAllBook)">
-                书籍管理
+            <div class="left-panel-block" @click="ChangePanel(2,RefreshPanel,QueryAllFruit)">
+                水果管理
             </div>
-            <div class="left-panel-block" @click="ChangePanel(3,RefreshPanel,QueryAllBookOrder)">
+            <div class="left-panel-block" @click="ChangePanel(3,RefreshPanel,QueryAllFruitOrder)">
                 订单管理
-            </div>
-            <div class="left-panel-block" @click="ChangePanel(4,RefreshPanel,QueryAllNotice)">
-                公告管理
             </div>
         </div>
         <div id="right-panel">
@@ -50,7 +47,7 @@
                             <span>注册日期</span>
                         </li>
                         <li v-for="(user,index) in searchedUsers" @click="OpenSearchDialog(index)">
-                            <span>{{user.id}}</span>
+                            <span>{{user.uid}}</span>
                             <span>{{user.account}}</span>
                             <span>{{user.password}}</span>
                             <span>{{user.gender}}</span>
@@ -67,7 +64,7 @@
                     </div>
                     <div class="search-dialog-block">
                         <span>Uid:</span>
-                        <input type="text" v-model="modifyingUser.id">
+                        <input type="text" v-model="modifyingUser.uid">
                     </div>
                     <div class="search-dialog-block">
                         <span>Account:</span>
@@ -105,8 +102,8 @@
             </div>
             <div class="right-panel-block" v-if="this.pages[1]">
                 <div id="right-search">
-                    <input type="text" v-model="willAddBookCategory">
-                    <button @click="AddBookCategory()">添加类别</button>
+                    <input type="text" v-model="willAddFruitCategory">
+                    <button @click="AddFruitCategory()">添加类别</button>
                 </div>
                 <div id="right-search-Result">
                     <ul>
@@ -116,11 +113,11 @@
                             <span>操作</span>
                             <span>操作</span>
                         </li>
-                        <li v-for="(category,index) in requestBookCategory">
-                            <span>{{category.bcno}}</span>
+                        <li v-for="(category,index) in requestFruitCategory">
+                            <span>{{category.fcno}}</span>
                             <input type="text" v-model="category.categoryName">
-                            <button @click="ModifyBookCategory(index)">修改</button>
-                            <button @click="DeleteBookCategory(index)">删除</button>
+                            <button @click="ModifyFruitCategory(index)">修改</button>
+                            <button @click="DeleteFruitCategory(index)">删除</button>
                         </li>
                     </ul>
                 </div>
@@ -129,48 +126,44 @@
                 <div id="right-search-Result">
                     <ul>
                         <li>
-                            <span style="width: 9.1%;" >书籍编号</span>
-                            <span style="width: 9.1%;" >书籍名称</span>
-                            <span style="width: 9.1%;" >书籍作者</span>
-                            <span style="width: 9.1%;" >书籍价格</span>
-                            <span style="width: 9.1%;" >书籍类型</span>
-                            <span style="width: 9.1%;" >书籍封面</span>
-                            <span style="width: 9.1%;" >书籍简介</span>
+                            <span style="width: 9.1%;" >水果编号</span>
+                            <span style="width: 9.1%;" >水果名称</span>
+                            <span style="width: 9.1%;" >水果价格</span>
+                            <span style="width: 9.1%;" >水果类型</span>
+                            <span style="width: 9.1%;" >水果封面</span>
+                            <span style="width: 9.1%;" >水果简介</span>
                             <span style="width: 9.1%;" >出版日期</span>
                             <span style="width: 9.1%;" >操作</span>
                             <span style="width: 9.1%;" >操作</span>
                         </li>
                         <li>
                             <input style="width: 9.1%;" type="text" placeholder="自动生成">
-                            <input style="width: 9.1%;" type="text" v-model="willAddBook.bname">
-                            <input style="width: 9.1%;" type="text" v-model="willAddBook.bauthor">
-                            <input style="width: 9.1%;" type="text" v-model="willAddBook.bprice">
-                            <input style="width: 9.1%;" type="text" v-model="willAddBook.bcategory">
-                            <input style="width: 9.1%;" type="text" v-model="willAddBook.burl">
-                            <input style="width: 9.1%;" type="text" v-model="willAddBook.binfo">
-                            <input style="width: 9.1%;" type="text" v-model="willAddBook.bpubdate">
-                            <button style="width: 9.1%;" @click="SendBookData('ADD',willAddBook)">添加</button>
+                            <input style="width: 9.1%;" type="text" v-model="willAddFruit.fname">
+                            <input style="width: 9.1%;" type="text" v-model="willAddFruit.fprice">
+                            <input style="width: 9.1%;" type="text" v-model="willAddFruit.fcategory">
+                            <input style="width: 9.1%;" type="text" v-model="willAddFruit.furl">
+                            <input style="width: 9.1%;" type="text" v-model="willAddFruit.finfo">
+                            <input style="width: 9.1%;" type="text" v-model="willAddFruit.fpubdate">
+                            <button style="width: 9.1%;" @click="SendFruitData('ADD',willAddFruit)">添加</button>
                             <button style="width: 9.1%;" @click="
-                            willAddBook.bname = '';
-                            willAddBook.bauthor = '';
-                            willAddBook.bprice = '';
-                            willAddBook.bcategory = '';
-                            willAddBook.burl = '';
-                            willAddBook.binfo = '';
-                            willAddBook.bpubdate = '';
+                            willAddFruit.fname = '';
+                            willAddFruit.fprice = '';
+                            willAddFruit.fcategory = '';
+                            willAddFruit.furl = '';
+                            willAddFruit.finfo = '';
+                            willAddFruit.fpubdate = '';
                             ">清空</button>
                         </li>
-                        <li v-for="(bookUnit,index) in requestBooks">
-                            <input style="width: 9.1%;" type="text" v-model="bookUnit.bno">
-                            <input style="width: 9.1%;" type="text" v-model="bookUnit.bname">
-                            <input style="width: 9.1%;" type="text" v-model="bookUnit.bauthor">
-                            <input style="width: 9.1%;" type="text" v-model="bookUnit.bprice">
-                            <input style="width: 9.1%;" type="text" v-model="bookUnit.bcategory">
-                            <input style="width: 9.1%;" type="text" v-model="bookUnit.burl">
-                            <input style="width: 9.1%;" type="text" v-model="bookUnit.binfo">
-                            <input style="width: 9.1%;" type="text" v-model="bookUnit.bpubdate">
-                            <button style="width: 9.1%;" @click="SendBookData('MOD',bookUnit)">修改</button>
-                            <button style="width: 9.1%;" @click="SendBookData('DEL',bookUnit)">删除</button>
+                        <li v-for="(fruitUnit,index) in requestFruits">
+                            <input style="width: 9.1%;" type="text" v-model="fruitUnit.fno">
+                            <input style="width: 9.1%;" type="text" v-model="fruitUnit.fname">
+                            <input style="width: 9.1%;" type="text" v-model="fruitUnit.fprice">
+                            <input style="width: 9.1%;" type="text" v-model="fruitUnit.fcategory">
+                            <input style="width: 9.1%;" type="text" v-model="fruitUnit.furl">
+                            <input style="width: 9.1%;" type="text" v-model="fruitUnit.finfo">
+                            <input style="width: 9.1%;" type="text" v-model="fruitUnit.fpubdate">
+                            <button style="width: 9.1%;" @click="SendFruitData('MOD',fruitUnit)">修改</button>
+                            <button style="width: 9.1%;" @click="SendFruitData('DEL',fruitUnit)">删除</button>
                         </li>
                     </ul>
                 </div>
@@ -180,7 +173,7 @@
                     <ul>
                         <li>
                             <span>订单编号</span>
-                            <span>确认时间</span>
+                            <span>订单用户</span>
                             <span>订单价格</span>
                             <span>接收地址</span>
                             <span>接收电话</span>
@@ -189,56 +182,26 @@
                         </li>
                         <li>
                             <input type="text" placeholder="自动生成">
-                            <input type="text" v-model="willAddBookOrder.confirmationtime">
-                            <input type="text" v-model="willAddBookOrder.totalprice">
-                            <input type="text" v-model="willAddBookOrder.address">
-                            <input type="text" v-model="willAddBookOrder.telephone">
-                            <button @click="SendBookOrderData('ADD',willAddBookOrder)">添加</button>
+                            <input type="text" v-model="willAddFruitOrder.account">
+                            <input type="text" v-model="willAddFruitOrder.totalprice">
+                            <input type="text" v-model="willAddFruitOrder.address">
+                            <input type="text" v-model="willAddFruitOrder.telephone">
+                            <button @click="SendFruitOrderData('ADD',willAddFruitOrder)">添加</button>
                             <button @click="
-                            willAddBookOrder.confirmationtime = '';
-                            willAddBookOrder.totalprice = '';
-                            willAddBookOrder.address = '';
-                            willAddBookOrder.telephone = '';
+                            willAddFruitOrder.confirmationtime = '';
+                            willAddFruitOrder.totalprice = '';
+                            willAddFruitOrder.address = '';
+                            willAddFruitOrder.telephone = '';
                             ">清空</button>
                         </li>
-                        <li v-for="(bookOrderUnit,index) in requestBookOrder">
-                            <input type="text" v-model="bookOrderUnit.oid">
-                            <input type="text" v-model="bookOrderUnit.confirmationtime">
-                            <input type="text" v-model="bookOrderUnit.totalprice">
-                            <input type="text" v-model="bookOrderUnit.address">
-                            <input type="text" v-model="bookOrderUnit.telephone">
-                            <button @click="SendBookOrderData('MOD',bookOrderUnit)">修改</button>
-                            <button @click="SendBookOrderData('DEL',bookOrderUnit)">删除</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="right-panel-block" v-if="this.pages[4]">
-                <div id="right-search-Result">
-                    <ul>
-                        <li>
-                            <span>公告编号</span>
-                            <span>公告标题</span>
-                            <span>公告日期</span>
-                            <span>公告内容</span>
-                            <span>操作</span>
-                            <span>操作</span>
-                        </li>
-                        <li>
-                            <input type="text" placeholder="自动生成">
-                            <input type="text" v-model="willAddNotice.noticeTitle">
-                            <input type="text" v-model="willAddNotice.noticeDate">
-                            <input type="text" v-model="willAddNotice.noticeContent">
-                            <button @click="SendNoticeData('ADD',willAddNotice)">添加</button>
-                            <button @click="willAddNotice.noticeTitle = '';willAddNotice.noticeDate = '';willAddNotice.noticeContent='';">清空</button>
-                        </li>
-                        <li v-for="(noticeUnit,index) in requestNotice">
-                            <input type="text" v-model="noticeUnit.nid">
-                            <input type="text" v-model="noticeUnit.noticeTitle">
-                            <input type="text" v-model="noticeUnit.noticeDate">
-                            <input type="text" v-model="noticeUnit.noticeContent">
-                            <button @click="SendNoticeData('MOD',noticeUnit)">修改</button>
-                            <button @click="SendNoticeData('DEL',noticeUnit)">删除</button>
+                        <li v-for="(FruitOrderUnit,index) in requestFruitOrder">
+                            <input type="text" v-model="FruitOrderUnit.oid">
+                            <input type="text" v-model="FruitOrderUnit.account">
+                            <input type="text" v-model="FruitOrderUnit.totalprice">
+                            <input type="text" v-model="FruitOrderUnit.address">
+                            <input type="text" v-model="FruitOrderUnit.telephone">
+                            <button @click="SendFruitOrderData('MOD',FruitOrderUnit)">修改</button>
+                            <button @click="SendFruitOrderData('DEL',FruitOrderUnit)">删除</button>
                         </li>
                     </ul>
                 </div>
@@ -255,40 +218,33 @@
                     searchDialogVisable: false,
                     modifyingUser:{},
                     modifyingUserIndex:0,
-                    willAddBookCategory: "",
-                    requestBookCategory: [],
-                    requestBooks:[],
-                    willAddBook:{
-                        bno:"",
-                        bname:"",
-                        bauthor:"",
-                        bprice:"",
-                        bcategory:"",
-                        burl:"",
-                        binfo:"",
-                        bpubdate:""
+                    willAddFruitCategory: "",
+                    requestFruitCategory: [],
+                    requestFruits:[],
+                    willAddFruit:{
+                        fno:"",
+                        fname:"",
+                        fprice:"",
+                        fcategory:"",
+                        furl:"",
+                        finfo:"",
+                        fpubdate:""
                     },
-                    requestBookOrder:[],
-                    willAddBookOrder:{
+                    requestFruitOrder:[],
+                    willAddFruitOrder:{
                         oid:"",
                         confirmationtime:"",
                         totalprice:"",
                         address:"",
                         telephone:"",
-                    },
-                    requestNotice:[],
-                    willAddNotice:{
-                        nid:"",
-                        noticeTitle:"",
-                        noticeDate:"",
-                        noticeContent:""
                     }
 
                 }
             }, methods: {
-
-                ChangePanel(page, func,init) {
-                    switch (page) {
+                ChangePanel(page, func,init)
+                {
+                    switch (page)
+                    {
                         case 0: func(0); break;
                         case 1: func(1);init();break;
                         case 2: func(2);init();break;
@@ -298,7 +254,8 @@
 
 
                 },
-                RefreshPanel(index) {
+                RefreshPanel(index)
+                {
                     for (let i = 0; i < this.pages.length; i++) {
                         if (i == index) {
                             this.pages[i] = true;
@@ -309,10 +266,11 @@
                     }
                     console.log("面板刷新完成");
                 },
-                SearchUserByAccount() {
+                SearchUserByAccount()
+                {
                     alert(this.searchAccount);
                     axios({
-                        url: "SearchUserServlet",
+                        url: "searchuser",
                         params:
                         {
                             searchAccount: this.searchAccount
@@ -327,10 +285,12 @@
                         console.log(err);
                     });
                 },
-                CloseSearchDialog() {
+                CloseSearchDialog()
+                {
                     this.searchDialogVisable = false;
                 },
-                OpenSearchDialog(index) {
+                OpenSearchDialog(index)
+                {
                 
                     function deepClone(obj) {
                         var _obj = JSON.stringify(obj) 
@@ -360,7 +320,7 @@
                     }else
                     {   
                         axios({
-                            url:"ModifyUserServlet",
+                            url:"moduser",
                             method:'post',
                             data:
                             {
@@ -391,15 +351,15 @@
                 {
                     alert("确认删除用户");
                     let modUser = this.modifyingUser;
-                    console.log(modUser.id);
-                    if(modUser.id!=undefined&&modUser.id!=null)
+                    console.log(modUser.uid);
+                    if(modUser.uid!=undefined&&modUser.uid!=null)
                     {
                         axios({
-                            url:"ModifyUserServlet",
+                            url:"deluser",
                             method:'post',
                             data:
                             {
-                                uid:modUser.id
+                                uid:modUser.uid
                             }
                         })
                         .then((result) => {
@@ -419,39 +379,34 @@
 
                     }
                 },
-                QueryAllBookCategory()
+                QueryAllFruitCategory()
                 {
                     axios({
-                        url:"ModifyBookCategoryServlet",
-                        method:'post',
-                        data:
-                        {
-                            type:'GET-ALL',
-                            data: {}
-                        }
+                        url:"getallcategory",
+                        method:'get'
                     })
                     .then((result) => {
                         let data = result.data;
                         console.log(data);
-                        this.requestBookCategory =data;
+                        this.requestFruitCategory =data;
                         
                     }).catch((err) => {
-                        console.log("请求书籍类型-出错了");
+                        console.log("请求水果类型-出错了");
                         console.log(err);                
                     }); 
                 },
-                ModifyBookCategory(index)
+                ModifyFruitCategory(index)
                 {
-                    alert("修改书籍类型"+index);
+                    alert("修改水果类型"+index);
                     let thisObj = this;
-                    let categoryData  = this.requestBookCategory[index];
+                    let categoryData  = this.requestFruitCategory[index];
                     axios({
-                            url:"ModifyBookCategoryServlet",
+                            url:"modcategory",
                             method:'post',
                             data:
                             {
-                                type:"MOD",
-                                data: categoryData
+                                fcno:categoryData.fcno,
+                                categoryName: categoryData.categoryName
                             }
                         })
                         .then((result) => {
@@ -459,30 +414,30 @@
                             let data = result.data;
                             if(data)
                             {
-                                alert("书籍类型修改成功");
-                                thisObj.QueryAllBookCategory();
+                                alert("水果类型修改成功");
+                                thisObj.QueryAllFruitCategory();
                             }else
                             {
-                                alert("书籍类型修改失败")
+                                alert("水果类型修改失败")
                             }
                             
                         }).catch((err) => {
-                            console.log("请求修改书籍类型信息--出错了");
+                            console.log("请求修改水果类型信息--出错了");
                             console.log(err);                
                         }); 
                 },
-                DeleteBookCategory(index)
+                DeleteFruitCategory(index)
                 {
-                    alert("删除书籍类型"+index);
+                    alert("删除水果类型"+index);
                     let thisObj = this;
-                    let categoryData  = this.requestBookCategory[index];
+                    let categoryData  = this.requestFruitCategory[index];
                     axios({
-                            url:"ModifyBookCategoryServlet",
+                            url:"delcategory",
                             method:'post',
                             data:
                             {
-                                type:"DEL",
-                                data: categoryData
+                                fcno:categoryData.fcno,
+                                categoryName: categoryData.categoryName
                             }
                         })
                         .then((result) => {
@@ -490,32 +445,29 @@
                             let data = result.data;
                             if(data)
                             {
-                                alert("书籍类型删除成功");
-                                thisObj.QueryAllBookCategory();
+                                alert("水果类型删除成功");
+                                thisObj.QueryAllFruitCategory();
                             }else
                             {
-                                alert("书籍类型删除失败")
+                                alert("水果类型删除失败")
                             }
                             
                         }).catch((err) => {
-                            console.log("请求删除书籍类型信息--出错了");
+                            console.log("请求删除水果类型信息--出错了");
                             console.log(err);                
                         }); 
                 },
-                AddBookCategory()
+                AddFruitCategory()
                 {
                     let thisObj = this;
-                    alert("添加书籍类型"+this.willAddBookCategory);
+                    alert("添加水果类型"+thisObj.willAddFruitCategory);
                     axios({
-                            url:"ModifyBookCategoryServlet",
+                            url:"addcategory",
                             method:'post',
                             data:
                             {
-                                type:"ADD",
-                                data:{
-                                    bcno:0,
-                                    categoryName:this.willAddBookCategory
-                                }
+                                fcno:1,
+                                categoryName:thisObj.willAddFruitCategory
                             }
                         })
                         .then((result) => {
@@ -523,46 +475,41 @@
                             let data = result.data;
                             if(data)
                             {
-                                alert("书籍类型添加成功");
-                                thisObj.QueryAllBookCategory();
+                                alert("水果类型添加成功");
+                                thisObj.QueryAllFruitCategory();
                             }else
                             {
-                                alert("书籍类型添加失败")
+                                alert("水果类型添加失败")
                             }
                             
                         }).catch((err) => {
-                            console.log("请求添加书籍类型信息--出错了");
+                            console.log("请求添加水果类型信息--出错了");
                             console.log(err);                
                         }); 
                 },
-                QueryAllBook()
+                QueryAllFruit()
                 {
-                    //alert("查询所有的书籍");
+                    //alert("查询所有的水果");
                     axios({
-                        url:"ModifyBookServlet",
-                            method:'post',
-                            data:
-                            {
-                                type:'GET-ALL',
-                                data: {}
-                            }
+                        url:"getallfruit",
+                            method:'get'
                     })
                     .then((result) => {
                         let data = result.data;
                         console.log(data);
-                        this.requestBooks =data;
+                        this.requestFruits =data;
                         
                     }).catch((err) => {
-                        console.log("请求所有书籍-出错了");
+                        console.log("请求所有水果-出错了");
                         console.log(err);                
                     }); 
                 },
-                SendBookData(mtype,mdata)
+                SendFruitData(mtype,mdata)
                 {
-                    alert("发送书籍数据Type:"+mtype);
+                    alert("发送水果数据Type:"+mtype);
                     let thisObj = this;
                     axios({
-                            url:"ModifyBookServlet",
+                            url:"modfruit",
                             method:'post',
                             data:
                             {
@@ -575,47 +522,42 @@
                             let data = result.data;
                             if(data)
                             {
-                                alert("书籍数据发送成功");
-                                thisObj.QueryAllBook();
+                                alert("水果数据发送成功");
+                                thisObj.QueryAllFruit();
                             }else
                             {
-                                alert("书籍数据发送失败")
+                                alert("水果数据发送失败")
                             }
                             
                         }).catch((err) => {
-                            console.log("请求修改书籍类型信息--出错了");
+                            console.log("请求修改水果类型信息--出错了");
                             console.log(err);                
                         }); 
                     
                 },
-                QueryAllBookOrder()
+                QueryAllFruitOrder()
                 {
                     //alert("查询所有的订单");
                     axios({
-                        url:"ModifyBookOrderServlet",
-                        method:'post',
-                        data:
-                        {
-                            type:'GET-ALL',
-                            data: {}
-                        }
+                        url:"getallorder",
+                        method:'get'
                     })
                     .then((result) => {
                         let data = result.data;
                         console.log(data);
-                        this.requestBookOrder =data;
+                        this.requestFruitOrder =data;
                         
                     }).catch((err) => {
                         console.log("请求所有订单-出错了");
                         console.log(err);                
                     }); 
                 },
-                SendBookOrderData(mtype,mdata)
+                SendFruitOrderData(mtype,mdata)
                 {
                     alert("发送订单数据Type:"+mtype);
                     let thisObj = this;
                     axios({
-                            url:"ModifyBookOrderServlet",
+                            url:"modorder",
                             method:'post',
                             data:
                             {
@@ -629,7 +571,7 @@
                             if(data)
                             {
                                 alert("订单数据发送成功");
-                                thisObj.QueryAllBookOrder();
+                                thisObj.QueryAllFruitOrder();
                             }else
                             {
                                 alert("订单数据发送失败")
@@ -639,62 +581,7 @@
                             console.log("请求发送订单数据--出错了");
                             console.log(err);                
                         }); 
-                },
-                QueryAllNotice()
-                {
-                    //alert("查询所有的公告");
-                    axios({
-                        url:"ModifyNoticeServlet",
-                        method:'post',
-                        data:
-                        {
-                            type:'GET-ALL',
-                            data: {}
-                        }
-                    })
-                    .then((result) => {
-                        let data = result.data;
-                        console.log(data);  
-                        this.requestNotice =data;
-                        
-                    }).catch((err) => {
-                        console.log("请求所有公告-出错了");
-                        console.log(err);                
-                    }); 
-                },
-                SendNoticeData(mtype,mdata)
-                {
-                    alert("发送公告数据Type:"+mtype);
-                    let thisObj = this;
-                    axios({
-                            url:"ModifyNoticeServlet",
-                            method:'post',
-                            data:
-                            {
-                                type:mtype,
-                                data: mdata
-                            }
-                        })
-                        .then((result) => {
-                            console.log(result);
-                            let data = result.data;
-                            if(data)
-                            {
-                                alert("公告数据发送成功");
-                                thisObj.QueryAllNotice();
-                            }else
-                            {
-                                alert("公告数据发送失败")
-                            }
-                            
-                        }).catch((err) => {
-                            console.log("请求发送公告数据--出错了");
-                            console.log(err);                
-                        }); 
                 }
-
-
-
             }, mounted() {
 
             }

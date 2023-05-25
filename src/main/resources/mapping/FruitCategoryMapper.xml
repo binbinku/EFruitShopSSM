@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bk.efruitshopssm.mapper.FruitCategoryMapper">
+    <!--获取所有-->
+    <select id="GetAllFruitCategory" resultType="com.bk.efruitshopssm.entity.FruitCategory">
+        select * from fruitcategorys;
+    </select>
+    <insert id="AddCategory" parameterType="String">
+        insert into fruitcategorys (categoryname)
+        values (#{categoryName});
+    </insert>
+    <delete id="DeleteCategory" parameterType="int">
+        delete from fruitcategorys where fcno=#{fcno};
+    </delete>
+
+    <update id="ModCategory" parameterType="com.bk.efruitshopssm.entity.FruitCategory">
+        update fruitcategorys set categoryname=#{categoryName} where fcno=#{fcno};
+    </update>
+</mapper>

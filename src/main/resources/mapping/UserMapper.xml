@@ -18,10 +18,29 @@
         where account = #{account} and password = #{password}
     </select>
 
-    <select id="AddUser" parameterType="com.bk.efruitshopssm.entity.User">
+    <insert id="AddUser" parameterType="com.bk.efruitshopssm.entity.User">
         insert into user(account,password)
         values (#{account}, #{password})
+    </insert>
+
+    <select id="UserFuzzyQuery" parameterType="String" resultType="com.bk.efruitshopssm.entity.User">
+        select *
+        from user
+        where account like CONCAT('%', #{account}, '%')
     </select>
 
+    <update id="UpdateUser" parameterType="com.bk.efruitshopssm.entity.User">
+        update user set account=#{account},
+                        password=#{password},
+                        gender=#{gender},
+                        telephone=#{telephone},
+                        address=#{address},
+                        email=#{email},
+                        signtime=#{signtime} where uid =#{uid};
 
+    </update>
+
+    <delete id="DeleteUserByUid" parameterType="int">
+        delete from user where uid=#{uid}
+    </delete>
 </mapper>

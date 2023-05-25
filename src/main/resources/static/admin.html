@@ -39,12 +39,12 @@
                 Login() {
 
                     console.log("[Post]:AdminLogin");
-                    let url = "AdminServlet"
-                    let parms = new URLSearchParams();
-                    parms.append("account", this.account);
-                    parms.append("password", this.password);
-
-                    axios.post(url, parms)
+                    let url = "adminlogin"
+                    axios.post(url, {
+                        "account":this.account,
+                        "password":this.password,
+                        "rem":false
+                    })
                         .then(function (response) {
                             let data = response.data;
                             console.log(data);

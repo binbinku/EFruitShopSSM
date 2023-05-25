@@ -1,1 +1,0 @@
-# 为专业实习而创建，基于 Vue3 + Axios + SptingBoot + MyBatis + Mysql 技术栈的网上水果店系统

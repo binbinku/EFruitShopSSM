@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bk.efruitshopssm.mapper.OrderMapper">
+
+    <select id="GetAllOrder" resultType="com.bk.efruitshopssm.entity.Order">
+        select * from orders;
+    </select>
+
+    <insert id="AddOrder" parameterType="com.bk.efruitshopssm.entity.Order">
+        insert into orders(account,address,telephone,totalprice) values (#{account},#{address},#{telephone},#{totalprice});
+    </insert>
+
+    <delete id="DelOrder" parameterType="int">
+        delete from orders where oid = #{oid}
+    </delete>
+
+    <update id="ModOrder" parameterType="com.bk.efruitshopssm.entity.Order">
+        update orders set account=#{account},address=#{address},telephone=#{telephone},totalprice=#{totalprice} where oid =#{oid}
+    </update>
+
+</mapper>

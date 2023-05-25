@@ -1,4 +1,4 @@
-package com.bk.efruitshopssm.controller;
+package com.bk.efruitshopssm.controller.main;
 
 import com.bk.efruitshopssm.entity.Unit.LoginUnit;
 import com.bk.efruitshopssm.entity.User;

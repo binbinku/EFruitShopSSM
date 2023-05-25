@@ -3,18 +3,18 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>🍊书店</title>
+    <title>🍎网上水果店</title>
     <link rel="stylesheet" href="css/shop.css">
     <script type="text/javascript" src="./script/vue.global.js"></script>
     <script type="text/javascript" src="./script/axios.js"></script>
 </head>
 
 <body>
-<div id="bookshopapp">
+<div id="fruitshopapp">
     <div id="top">
         <div id="top-left">
-            <div id="top-left-logo">📖</div>
-            <div id="top-left-name">🍊书店</div>
+            <div id="top-left-logo">🍉</div>
+            <div id="top-left-name">水果店</div>
         </div>
         <div id="top-right">
             <div id="top-right-login">
@@ -27,7 +27,7 @@
             <div id="mid-left-categroy">
                 <ul>
                     <li @click="GetAllBooks()">全部</li>
-                    <li v-for="category in bcategorys" @click="QueryACategoryBooks(category.bcno)">
+                    <li v-for="category in fcategorys" @click="QueryACategoryFruits(category.fcno)">
                         {{category.categoryName}}
                     </li>
                 </ul>
@@ -36,20 +36,20 @@
         <div id="mid-right">
             <div id="mid-right-content">
                 <ul>
-                    <li v-for="bookUnit in bookUnits">
-                        <div id="book-unit">
-                            <div id="book-unit-img">
-                                <img v-bind:src="bookUnit.burl" alt="fengmian">
+                    <li v-for="fruitUnit in fruitUnits">
+                        <div id="fruit-unit">
+                            <div id="fruit-unit-img">
+                                <img v-bind:src="fruitUnit.furl" alt="fengmian">
                             </div>
-                            <div id="book-unit-info">
-                                <span style="font-weight: bolder;">{{bookUnit.bname}}</span>
-                                <span>作者:{{bookUnit.bauthor}}</span>
-                                <span>出版日期:{{bookUnit.bpubdate}}</span>
+                            <div id="fruit-unit-info">
+                                <span style="font-weight: bolder;">{{fruitUnit.fname}}</span>
+                                <span>种类:{{fruitUnit.fcategory}}</span>
+                                <span>上架日期:{{fruitUnit.fpubdate}}</span>
                             </div>
-                            <div id="book-unit-text">
-                                <div id="book-unit-text-content"><b>简介:</b>{{bookUnit.binfo}}</div>
+                            <div id="fruit-unit-text">
+                                <div id="fruit-unit-text-content"><b>简介:</b>{{fruitUnit.finfo}}</div>
                             </div>
-                            <div id="book-unit-btn" @click="PutCart(bookUnit.bno)">
+                            <div id="fruit-unit-btn" @click="PutCart(fruitUnit)">
                                 加<br>购<br>物<br>车
                             </div>
                         </div>
@@ -69,10 +69,9 @@
             <ul id="cart-content-ul">
                 <li v-for="cartUnit in cartUnits">
                     <div id="cart-data-unit">
-                        <span style="width: 40%;">{{cartUnit.bname}}</span>
-                        <span style="width: 33%;">{{cartUnit.bauthor}}</span>
-                        <span style="width: 10%;">{{cartUnit.bprice}}</span>
-                        <div id="cart-data-unit-del" @click="DelCartItem(cartUnit.bno)">
+                        <span style="width: 40%;">{{cartUnit.data.fname}}</span>
+                        <span style="width: 10%;">{{cartUnit.count}}</span>
+                        <div id="cart-data-unit-del" @click="DelCartItem(cartUnit.data.fno)">
                             删除
                         </div>
                     </div>
@@ -84,111 +83,68 @@
         <button id="buy-button" @click="Buy()" v-show="buyBtnVisable">Buy</button>
         <button id="cart-button" @click="OpenCart()">+</button>
     </div>
-    <div id="notice" v-if="noticeVisable">
-        <div id="notice-top">
-            <h1>📃公告</h1>
-            <div id="notice-close-btn" @click="CloseNotice()">
-            </div>
-        </div>
-        <div id="notice-info">
-            <h1>{{noticeUnit.noticeTitle}}</h1>
-            <h3>日期:{{noticeUnit.noticeDate}}</h3>
-        </div>
-        <div id="notice-content">
-            {{noticeUnit.noticeContent}}
-        </div>
-    </div>
 </div>
 <script>
-    const bookshopapp = Vue.createApp({
+    const fruitshopapp = Vue.createApp({
         data() {
             return {
-                bcategorys:[""],
-                bookUnits:[""],
-                cartUnits:[""],
+                fcategorys:[],
+                fruitUnits:[],
+                cartUnits:[],
                 cartVisable:false,
                 buyBtnVisable:false,
-                noticeUnit:{},
-                noticeVisable:true,
                 totalOrderPrice:0
             }
         },
         mounted()
         {
-            //请求shop页数据===============================
+            //===========================请求shop页数据===============================
             axios({
-                url:"BookShopServlet"
-            })
-                .then((result) => {
+                url:"shop"
+            }).then((result) => {
                     let data = result.data;
-                    this.bcategorys = data.bookCategoryList;
-                    this.bookUnits = data.bookUnitList;
-                    this.cartUnits = data.cartUnitList;
-                    QueryNotice();
+                    this.fcategorys = data.fruitCategoryList;
+                    this.fruitUnits = data.fruitUnitList;
 
-                }).catch((err) => {
-                console.log("初始化出错了");
+                })
+                .catch((err) => {
+                    console.log("初始化出错了");
                 console.log(err);
             });
-            let thisObj = this;
-            function QueryNotice()
-            {
-                //请求公告===========================
-                axios({
-                    url:"RandomNoticeServlet"
-                })
-                    .then((result) => {
-                        let data = result.data;
-                        console.log(data);
-                        thisObj.noticeUnit = data;
-
-                    }).catch((err) => {
-                    console.log("出错了");
-                    console.log(err);
-                });
-            }
             this.OpenCart();
-
         },
         methods: {
-            QueryACategoryBooks(mbcno)
+            QueryACategoryFruits(mfcno)
             {
-                console.log(mbcno);
+                console.log(mfcno);
                 axios({
-                    url:"GetCategoryBooksServlet",
+                    url:"getacategoryfruit",
                     params:
                         {
-                            bcno:mbcno
+                            fcno:mfcno
                         }
                 })
                     .then((result) => {
                         let data = result.data;
                         console.log(data);
-                        this.bookUnits =data;
+                        this.fruitUnits =data;
 
                     }).catch((err) => {
-                    console.log("请求一个类型的书-出错了");
+                    console.log("请求一个类型的水果-出错了");
                     console.log(err);
                 });
             },
-            DelCartItem(mbno)
+            DelCartItem(mfno)
             {
-                axios({
-                    url:"RemoveCartServlet",
-                    params:
-                        {
-                            bno:mbno
-                        }
-                })
-                    .then((result) => {
-                        let data = result.data;
-                        console.log(data);
-                        this.cartUnits =data;
-
-                    }).catch((err) => {
-                    console.log("请求购物车物品--出错了");
-                    console.log(err);
-                });
+                let mdata = this.cartUnits;
+                for (var i = mdata.length - 1; i >= 0; i--)
+                {
+                    if (mdata[i].data.fno === mfno) {
+                        mdata[i].count--;
+                        if(mdata[i].count<=0)
+                            mdata.splice(i, 1);
+                    }
+                }
 
             },
             CloseCart()
@@ -201,30 +157,29 @@
                 this.cartVisable = true;
                 this.buyBtnVisable= true;
             },
-            PutCart(mbno)
+            PutCart(mfruitUnit)
             {
-                axios({
-                    url:"PutCartServlet",
-                    params:
-                        {
-                            bno:mbno
-                        }
-                })
-                    .then((result) => {
-                        let data = result.data;
-                        console.log(data);
-                        this.cartUnits =data;
+                console.log("添加到购物车")
+                let mcartUnits = this.cartUnits;
+                for(let i =0;i<mcartUnits.length;i++)
+                {
+                    if(mcartUnits[i].data.fno === mfruitUnit.fno)
+                    {
+                        mcartUnits[i].count++;
+                        return;
+                    }
+                }
 
-                    }).catch((err) => {
-                    console.log("请求添加到购物车--出错了");
-                    console.log(err);
+                mcartUnits.push({
+                   data:mfruitUnit,
+                   count:1
                 });
 
             },
             Buy()
             {
                 axios({
-                    url:"OrderServlet",
+                    url:"buy",
                     method:'post',
                     data:
                         {
@@ -238,35 +193,32 @@
                     console.log(err);
                 });
 
-                alert("提交订单成功,共计"+this.totalOrderPrice+"元");
-            },
-            CloseNotice()
-            {
-                this.noticeVisable = false;
+                alert("提交订单成功,共"+this.cartUnits.length+"种水果🍉");
             },
             GetAllBooks()
             {
                 axios({
                     url:"getallfruit",
                     method:'get',
-                    data:
-                        {
-                        }
+                    data: {}
                 })
-                    .then((result) =>
-                    {
+                .then((result) => {
                         let data = result.data;
-                        this.bookUnits = data;
-                    }).catch((err) => {
-                    console.log("获取所有书籍出错了");
+                        this.fruitUnits = data;
+                })
+                .catch((err) => {
+                    console.log("获取所有水果出错了");
                     console.log(err);
                 });
             }
         },
         watch: {
-            cartUnits(newcartUnits, oldcartUnits) {
+            cartUnits(newcartUnits, oldcartUnits)
+            {
                 console.log("购物车数据有变化,重新计算总价格");
+
                 this.totalOrderPrice = 0;
+
                 for(let i = 0; i < newcartUnits.length; i++)
                 {
                     this.totalOrderPrice = this.totalOrderPrice + this.cartUnits[i].bprice;
@@ -276,7 +228,8 @@
 
     });
 
-    bookshopapp.mount("#bookshopapp");
+    fruitshopapp.mount("#fruitshopapp");
+
 </script>
 </body>
 
